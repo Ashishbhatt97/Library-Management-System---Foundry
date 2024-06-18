@@ -59,10 +59,39 @@ contract LibraryManagement {
         newUser.userName = _userName;
         newUser.userId = userCount;
         newUser.userRole = Role.Member;
-        newUser.userGender = Gender.Male;
+        newUser.userGender = Gender.Male; 
         newUser.email = _email;
         newUser.numberOfBookIssued = 0;
 
         emit UserAdded(userCount, _userName, _email);
     }
+
+  event BookAdded(string title, string authorName, uint256 copiesAvailable);
+   
+    function addBook(
+        string memory _title,
+        string memory _authorName,
+        string memory _publisher,
+        string memory _publicationDate,
+        string memory _category,
+        uint256 _copiesAvailable
+    ) public onlyOwner {
+        booksCount++;
+
+        books[booksCount] = Book({
+            bookId: booksCount,
+            title: _title,
+            authorName: _authorName,
+            publisher: _publisher,
+            publicationDate: _publicationDate,
+            category: _category,
+            copiesAvailable: _copiesAvailable
+        });
+
+        emit BookAdded(_title, _authorName, _copiesAvailable);
+    }
+
+
+ 
+
 }
