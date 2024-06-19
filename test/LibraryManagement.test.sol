@@ -42,7 +42,7 @@ contract LibraryTest is Test {
 
         libraryInstance.addBook(
             "The alchemist",
-            "paulo coelho",
+            "Paulo Coelho",
             "xyz publication",
             "15.nov.2022",
             "reading",
@@ -63,7 +63,7 @@ contract LibraryTest is Test {
 
         assertEq(bookId, 1);
         assertEq(title, "The alchemist");
-        assertEq(authorName, "paulo coelho");
+        assertEq(authorName, "Paulo Coelho");
         assertEq(publisher, "xyz publication");
         assertEq(publicationDate, "15.nov.2022");
         assertEq(category, "reading");
@@ -74,7 +74,7 @@ contract LibraryTest is Test {
 
         libraryInstance.addBook(
             "The alchemist",
-            "paulo coelho",
+            "Paulo Coelho",
             "xyz publication",
             "15.nov.2022",
             "reading",
@@ -89,7 +89,7 @@ contract LibraryTest is Test {
         vm.prank(owner);
         libraryInstance.addBook(
             "The alchemist",
-            "paulo coelho",
+            "Paulo Coelho",
             "xyz publication",
             "15.nov.2022",
             "reading",
@@ -112,5 +112,42 @@ contract LibraryTest is Test {
         vm.expectRevert("You cannot make these changes!");
 
         libraryInstance.bookIssue(1, student1);
+    }
+
+    function testBookIssuesByUser() public {
+        vm.prank(student1);
+        libraryInstance.addUser("Ashish", "ashishbhatt0197@gmail.com");
+
+        vm.prank(owner);
+        libraryInstance.addBook(
+            "The alchemist",
+            "Paulo Coelho",
+            "xyz publication",
+            "15.nov.2022",
+            "reading",
+            5
+        );
+
+        libraryInstance.addBook(
+            "IKIGAI",
+            "hector garcia & francesc miralles",
+            "Ediciones Urano",
+            "2016",
+            "General Guidance",
+            5
+        );
+
+        assertEq(libraryInstance.booksCount(), 2);
+        assertEq(libraryInstance.userCount(), 1);
+
+        libraryInstance.bookIssue(1, student1);
+        libraryInstance.bookIssue(2, student1);
+
+        uint256[] memory totalBookIssued = libraryInstance.booksIssuedByUser(
+            student1
+        );
+        assertEq(totalBookIssued.length, 2);
+        assertEq(totalBookIssued[0], 1);
+        assertEq(totalBookIssued[1], 2);
     }
 }
