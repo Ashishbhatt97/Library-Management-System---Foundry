@@ -7,7 +7,7 @@ contract LibraryManagement {
     uint256 public booksCount = 0;
 
     constructor() {
-        owner = msg.sender; 
+        owner = msg.sender;
     }
 
     enum Role {
@@ -96,7 +96,10 @@ contract LibraryManagement {
         require(books[_bookId].copiesAvailable > 0, "No more copies available");
 
         User storage user = users[userAddress];
-        require(user.numberOfBookIssued < 5, "You cannot take more than 5 books");
+        require(
+            user.numberOfBookIssued < 5,
+            "You cannot take more than 5 books"
+        );
 
         uint256 booksIssuedIndex = user.numberOfBookIssued;
         user.bookIssued[booksIssuedIndex] = books[_bookId];
@@ -107,7 +110,9 @@ contract LibraryManagement {
         emit BookIssued(userAddress, _bookId, books[_bookId].title);
     }
 
-    function booksIssuedByUser(address _userAddress) public onlyOwner returns (uint256[] memory) {
+    function booksIssuedByUser(
+        address _userAddress
+    ) public onlyOwner returns (uint256[] memory) {
         User storage user = users[_userAddress];
         uint256[] memory issuedBooks = new uint256[](user.numberOfBookIssued);
 

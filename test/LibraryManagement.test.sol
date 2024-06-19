@@ -81,4 +81,36 @@ contract LibraryTest is Test {
             5
         );
     }
+
+    function testBookIssue() public {
+        vm.prank(student1);
+        libraryInstance.addUser("Ashish", "ashishbhatt0197@gmail.com");
+
+        vm.prank(owner);
+        libraryInstance.addBook(
+            "The alchemist",
+            "paulo coelho",
+            "xyz publication",
+            "15.nov.2022",
+            "reading",
+            5
+        );
+
+        assertEq(libraryInstance.booksCount(), 1);
+        assertEq(libraryInstance.userCount(), 1);
+
+        libraryInstance.bookIssue(1, student1);
+        (, , , , , , uint256 copiesAvailable) = libraryInstance.books(1);
+        (, , , , , uint256 numberOfBookIssued) = libraryInstance.users(
+            student1
+        );
+
+        assertEq(copiesAvailable, 4);
+        assertEq(numberOfBookIssued, 1);
+
+        vm.prank(student2);
+        vm.expectRevert("You cannot make these changes!");
+
+        libraryInstance.bookIssue(1, student1);
+    }
 }
