@@ -35,4 +35,50 @@ contract LibraryTest is Test {
         assertEq(email, "ashishbhatt0197@gmail.com");
         assertEq(numberOfBookIssued, 0);
     }
+
+    // Add books test function
+    function testAddBook() public {
+        assertEq(libraryInstance.booksCount(), 0);
+
+        libraryInstance.addBook(
+            "The alchemist",
+            "paulo coelho",
+            "xyz publication",
+            "15.nov.2022",
+            "reading",
+            5
+        );
+
+        assertEq(libraryInstance.booksCount(), 1);
+
+        (
+            uint256 bookId,
+            string memory title,
+            string memory authorName,
+            string memory publisher,
+            string memory publicationDate,
+            string memory category,
+            uint256 copiesAvailable
+        ) = libraryInstance.books(1);
+
+        assertEq(bookId, 1);
+        assertEq(title, "The alchemist");
+        assertEq(authorName, "paulo coelho");
+        assertEq(publisher, "xyz publication");
+        assertEq(publicationDate, "15.nov.2022");
+        assertEq(category, "reading");
+        assertEq(copiesAvailable, 5);
+
+        vm.prank(student2);
+        vm.expectRevert("You cannot make these changes!");
+
+        libraryInstance.addBook(
+            "The alchemist",
+            "paulo coelho",
+            "xyz publication",
+            "15.nov.2022",
+            "reading",
+            5
+        );
+    }
 }
