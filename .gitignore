@@ -9,6 +9,7 @@ out/
 
 # Docs
 docs/
+.secret
 
 # Dotenv file
 .env

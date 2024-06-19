@@ -7,7 +7,7 @@ contract LibraryManagement {
     uint256 public booksCount = 0;
 
     constructor() {
-        owner = msg.sender;
+        owner = msg.sender; 
     }
 
     enum Role {
@@ -50,7 +50,6 @@ contract LibraryManagement {
     event BookIssued(address userAddress, uint256 bookId, string title);
     event issuedBooksByUser(uint256 userId, uint256[] bookIds);
 
-
     modifier onlyOwner() {
         require(owner == msg.sender, "You cannot make these changes!");
         _;
@@ -69,7 +68,6 @@ contract LibraryManagement {
 
         emit UserAdded(userCount, _userName, _email);
     }
-
 
     function addBook(
         string memory _title,
@@ -94,15 +92,11 @@ contract LibraryManagement {
         emit BookAdded(_title, _authorName, _copiesAvailable);
     }
 
-  
     function bookIssue(uint256 _bookId, address userAddress) public onlyOwner {
         require(books[_bookId].copiesAvailable > 0, "No more copies available");
 
         User storage user = users[userAddress];
-        require(
-            user.numberOfBookIssued < 5,
-            "You cannot take more than 5 books"
-        );
+        require(user.numberOfBookIssued < 5, "You cannot take more than 5 books");
 
         uint256 booksIssuedIndex = user.numberOfBookIssued;
         user.bookIssued[booksIssuedIndex] = books[_bookId];
@@ -113,9 +107,7 @@ contract LibraryManagement {
         emit BookIssued(userAddress, _bookId, books[_bookId].title);
     }
 
-    function booksIssuedByUser(
-        address _userAddress
-    ) public onlyOwner returns (uint256[] memory) {
+    function booksIssuedByUser(address _userAddress) public onlyOwner returns (uint256[] memory) {
         User storage user = users[_userAddress];
         uint256[] memory issuedBooks = new uint256[](user.numberOfBookIssued);
 
