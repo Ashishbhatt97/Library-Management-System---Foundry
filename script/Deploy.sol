@@ -18,3 +18,5 @@ contract LibraryScript is Script {
         vm.stopBroadcast();
     }
 }
+// forge create --rpc-url https://rpc-amoy.polygon.technology --private-key <Private-key> src/LibraryManagement.sol:LibraryManagement --verify
+// https://amoy.polygonscan.com/address/0xc7cfc9add6afa06ee855202e35445145b5af4e6f
