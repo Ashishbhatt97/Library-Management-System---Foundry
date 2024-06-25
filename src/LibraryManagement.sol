@@ -122,4 +122,31 @@ contract LibraryManagement {
         emit issuedBooksByUser(user.userId, issuedBooks);
         return issuedBooks;
     }
+
+    function booksReturnedByUser(
+        address _userAddress,
+        uint256 _bookId
+    ) public onlyOwner {
+        User storage user = users[_userAddress];
+
+        bool found = false;
+        uint256 index;
+
+        for (uint256 i = 0; i < user.numberOfBookIssued; i++) {
+            if (user.bookIssued[i].bookId == _bookId) {
+                index = i;
+                found = true;
+                break;
+            }
+        }
+
+        require(found, "Book not found in issued list");
+
+        for (uint256 i = index; i < user.numberOfBookIssued - 1; i++) {
+            user.bookIssued[i] = user.bookIssued[i + 1];
+        }
+
+        delete user.bookIssued[user.numberOfBookIssued - 1];
+        user.numberOfBookIssued -= 1;
+    }
 }

@@ -150,4 +150,43 @@ contract LibraryTest is Test {
         assertEq(totalBookIssued[0], 1);
         assertEq(totalBookIssued[1], 2);
     }
+
+    function testReturnBook() public {
+        libraryInstance.addUser("Ashish", "ashishbhatt0197@gmail.com");
+        libraryInstance.addBook(
+            "The alchemist",
+            "Paulo Coelho",
+            "xyz publication",
+            "15.nov.2022",
+            "reading",
+            5
+        );
+
+        libraryInstance.addBook(
+            "IKIGAI",
+            "hector garcia & francesc miralles",
+            "Ediciones Urano",
+            "2016",
+            "General Guidance",
+            5
+        );
+
+        libraryInstance.bookIssue(1, student1);
+        libraryInstance.bookIssue(2, student1);
+
+        assertEq(libraryInstance.booksCount(), 2);
+        assertEq(libraryInstance.userCount(), 1);
+
+        assertEq(libraryInstance.booksIssuedByUser(student1)[0], 1);
+        assertEq(libraryInstance.booksIssuedByUser(student1)[1], 2);
+
+        libraryInstance.booksReturnedByUser(student1, 1);
+
+        uint256[] memory totalBookIssued = libraryInstance.booksIssuedByUser(
+            student1
+        );
+
+        require(totalBookIssued.length == 1, "Something went wrong!");
+        assertEq(libraryInstance.booksIssuedByUser(student1)[0], 2);
+    }
 }
